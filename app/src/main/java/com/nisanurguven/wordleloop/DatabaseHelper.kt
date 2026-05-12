@@ -100,6 +100,47 @@ class DatabaseHelper(context: Context) :
         """)
     }
 
+    fun addUser(userName: String, password: String, email: String): Boolean {
+
+        val db = this.writableDatabase
+
+        val query = """
+        INSERT INTO Users(userName, password, email, createdAt)
+        VALUES(?, ?, ?, datetime('now'))
+    """
+
+        val statement = db.compileStatement(query)
+
+        statement.bindString(1, userName)
+        statement.bindString(2, password)
+        statement.bindString(3, email)
+
+        val result = statement.executeInsert()
+
+        db.close()
+
+        return result != -1L
+    }
+
+    fun checkUser(userName: String, password: String): Boolean {
+
+        val db = this.readableDatabase
+
+        val query = """
+        SELECT * FROM Users
+        WHERE userName = ? AND password = ?
+    """
+
+        val cursor = db.rawQuery(query, arrayOf(userName, password))
+
+        val exists = cursor.count > 0
+
+        cursor.close()
+        db.close()
+
+        return exists
+    }
+
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
 
         db.execSQL("DROP TABLE IF EXISTS QuizResults")
