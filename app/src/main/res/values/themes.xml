@@ -6,4 +6,19 @@
     </style>
 
     <style name="Theme.Wordleloop" parent="Base.Theme.Wordleloop" />
+    <style name="MenuCardStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">130dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">6dp</item>
+    </style>
+
+    <style name="MenuInnerLayoutStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+    </style>
 </resources>
