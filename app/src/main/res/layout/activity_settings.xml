@@ -56,7 +56,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Kategori Seçimi Kartı (ID Bazlı) -->
+        <!-- Kategori Seçimi Kartı -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -143,7 +143,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Zorluk Seviyesi Kartı -->
+        <!-- Zorluk Seviyesi Kartı (1-5 Arası Güncellendi) -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -158,23 +158,32 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/tvDifficultyLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Zorluk Seviyesi"
+                    android:text="Zorluk Seviyesi: 2"
                     android:textStyle="bold"
                     android:textColor="#333333"
                     android:layout_marginBottom="12dp"/>
 
-                <RadioGroup
-                    android:id="@+id/rgDifficulty"
+                <SeekBar
+                    android:id="@+id/seekBarDifficulty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:max="4"
+                    android:progress="1"
+                    android:progressTint="#1A4B8F"
+                    android:thumbTint="#1A4B8F" />
 
-                    <RadioButton android:id="@+id/rbEasy" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Kolay"/>
-                    <RadioButton android:id="@+id/rbMedium" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Orta" android:checked="true"/>
-                    <RadioButton android:id="@+id/rbHard" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Zor"/>
-                </RadioGroup>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="12dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="1" android:textSize="12sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="5" android:textSize="12sp"/>
+                </LinearLayout>
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

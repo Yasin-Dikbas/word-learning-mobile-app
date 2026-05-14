@@ -16,11 +16,25 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // SeekBar Ayarı
+        // Mevcut ayarları yükle (Kullanıcı daha önce ne seçtiyse onu görsün)
+        loadCurrentSettings()
+
+        // Günlük Kelime Hedefi SeekBar Dinleyicisi
         binding.seekBarDailyGoal.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val goal = if (progress == 0) 1 else progress
                 binding.tvDailyGoalLabel.text = "Günlük Kelime Hedefi: $goal"
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        // ZORLUK SEVİYESİ SeekBar Dinleyicisi (1-5 Arası)
+        binding.seekBarDifficulty.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                // SeekBar 0-4 arası çalışır, biz onu 1-5 yapıyoruz
+                val level = progress + 1
+                binding.tvDifficultyLabel.text = "Zorluk Seviyesi: $level"
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
@@ -31,18 +45,30 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadCurrentSettings() {
+        val sharedPref = getSharedPreferences("LoopWordsSettings", MODE_PRIVATE)
+        val currentGoal = sharedPref.getInt("daily_goal", 10)
+        val currentDiff = sharedPref.getInt("difficulty", 2)
+
+        binding.seekBarDailyGoal.progress = currentGoal
+        binding.tvDailyGoalLabel.text = "Günlük Kelime Hedefi: $currentGoal"
+
+        // Zorluk seviyesini yükle (Veritabanındaki 1-5 değerini SeekBar'ın 0-4 aralığına çeviriyoruz)
+        binding.seekBarDifficulty.progress = currentDiff - 1
+        binding.tvDifficultyLabel.text = "Zorluk Seviyesi: $currentDiff"
+    }
+
     private fun saveSettings() {
-        val dailyGoal = binding.seekBarDailyGoal.progress
-        val difficulty = when (binding.rgDifficulty.checkedRadioButtonId) {
-            R.id.rbEasy -> 1
-            R.id.rbHard -> 3
-            else -> 2
-        }
+        val dailyGoal = if (binding.seekBarDailyGoal.progress == 0) 1 else binding.seekBarDailyGoal.progress
+
+        // ZORLUK: SeekBar'dan gelen 0-4 değerini veritabanı için 1-5 yapıyoruz
+        val difficulty = binding.seekBarDifficulty.progress + 1
 
         val selectedCategoryIds = mutableListOf<Int>()
         for (i in 0 until binding.chipGroupCategories.childCount) {
             val chip = binding.chipGroupCategories.getChildAt(i) as Chip
             if (chip.isChecked) {
+                // Chip ID'lerini doğrudan veritabanı ID'lerine eşliyoruz
                 val dbId = when (chip.id) {
                     R.id.chip_1 -> 1
                     R.id.chip_2 -> 2
@@ -58,17 +84,16 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        // --- KAYIT BAŞLIYOR ---
+        // Kayıt İşlemi
         val sharedPref = getSharedPreferences("LoopWordsSettings", MODE_PRIVATE)
         with(sharedPref.edit()) {
             putInt("daily_goal", dailyGoal)
             putInt("difficulty", difficulty)
-            // Kategori ID'lerini virgülle ayırarak String olarak kaydediyoruz
             putString("categories", selectedCategoryIds.joinToString(","))
             apply()
         }
 
-        Toast.makeText(this, "Ayarlar kaydedildi!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Ayarlar başarıyla güncellendi!", Toast.LENGTH_SHORT).show()
         finish()
     }
 }

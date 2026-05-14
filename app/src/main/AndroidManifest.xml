@@ -45,6 +45,10 @@
             android:name=".QuizActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".ReportActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

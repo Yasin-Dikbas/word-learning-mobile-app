@@ -1,23 +1,23 @@
 package com.nisanurguven.wordleloop
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.EditText
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.nisanurguven.wordleloop.databinding.AddWordActivityBinding
-import com.nisanurguven.wordleloop.databinding.ItemSentenceBinding // Dinamik cümle satırı için
+import com.nisanurguven.wordleloop.databinding.ItemSentenceBinding
 
 class AddWordActivity : AppCompatActivity() {
 
     private lateinit var binding: AddWordActivityBinding
+    private lateinit var dbHelper: DatabaseHelper
     private var selectedImageUri: String? = null
 
-    // Galeri açma işlemi için
+    // Galeri açma işlemi
     private val getImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
             binding.ivSelectedImage.setImageURI(it)
@@ -31,17 +31,30 @@ class AddWordActivity : AppCompatActivity() {
         binding = AddWordActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Resim seçme alanına tıklama
+        dbHelper = DatabaseHelper(this)
+
+        // --- ZORLUK SEVİYESİ SEEKBAR AYARI ---
+        binding.seekBarAddWordDifficulty.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                // 0-4 arası olan progress'i 1-5 seviyesine çeviriyoruz
+                val level = progress + 1
+                binding.tvAddWordDifficultyLabel.text = "Kelime Zorluğu: $level"
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        // Resim seçme
         binding.frameImagePicker.setOnClickListener {
             getImage.launch("image/*")
         }
 
-        // "+ Yeni Cümle Ekle" butonuna tıklama
+        // Yeni cümle satırı ekle
         binding.btnAddSentence.setOnClickListener {
             addNewSentenceField()
         }
 
-        // "Kelimeyi Kaydet" butonuna tıklama
+        // KELİMEYİ KAYDET
         binding.btnSaveWord.setOnClickListener {
             if (validateInputs()) {
                 saveWordToDatabase()
@@ -50,11 +63,9 @@ class AddWordActivity : AppCompatActivity() {
     }
 
     private fun addNewSentenceField() {
-        // Her tıklandığında yeni bir cümle satırı oluşturur
         val inflater = LayoutInflater.from(this)
         val sentenceBinding = ItemSentenceBinding.inflate(inflater, binding.containerSentences, false)
 
-        // Silme butonu eklemek istersen:
         sentenceBinding.root.setOnLongClickListener {
             binding.containerSentences.removeView(it)
             true
@@ -64,39 +75,60 @@ class AddWordActivity : AppCompatActivity() {
     }
 
     private fun validateInputs(): Boolean {
-        val eng = binding.etEnglishWord.text.toString()
-        val tr = binding.etTurkishWord.text.toString()
-        val phon = binding.etPhonetic.text.toString()
-        val read = binding.etTurkishReading.text.toString()
+        val eng = binding.etEnglishWord.text.toString().trim()
+        val tr = binding.etTurkishWord.text.toString().trim()
 
-        if (eng.isEmpty() || tr.isEmpty() || phon.isEmpty() || read.isEmpty()) {
-            Toast.makeText(this, "Lütfen yıldızlı (*) alanları doldurun!", Toast.LENGTH_SHORT).show()
+        if (eng.isEmpty() || tr.isEmpty()) {
+            Toast.makeText(this, "Lütfen İngilizce ve Türkçe karşılıklarını doldurun!", Toast.LENGTH_SHORT).show()
             return false
         }
 
-        if (selectedImageUri == null) {
-            Toast.makeText(this, "Lütfen bir resim seçin!", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        // Cümlelerin kontrolü
+        // Örnek cümlelerin kontrolü
         for (i in 0 until binding.containerSentences.childCount) {
             val view = binding.containerSentences.getChildAt(i)
             val etEngSentence = view.findViewById<EditText>(R.id.etSentenceEng)
             val etTrSentence = view.findViewById<EditText>(R.id.etSentenceTr)
 
             if (etEngSentence.text.isEmpty() || etTrSentence.text.isEmpty()) {
-                Toast.makeText(this, "Lütfen tüm örnek cümleleri ve anlamlarını doldurun!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Lütfen eklediğiniz tüm örnek cümleleri doldurun!", Toast.LENGTH_SHORT).show()
                 return false
             }
         }
-
         return true
     }
 
     private fun saveWordToDatabase() {
-        // Burada veritabanı (Firestore veya MsSQL) işlemlerini yapabilirsin
-        Toast.makeText(this, "Kelime başarıyla hazırlandı!", Toast.LENGTH_LONG).show()
-        finish() // Ekranı kapatıp ana menüye döner
+        val eng = binding.etEnglishWord.text.toString().trim()
+        val tr = binding.etTurkishWord.text.toString().trim()
+        val phonetic = binding.etPhonetic.text.toString().trim()
+        val reading = binding.etTurkishReading.text.toString().trim()
+
+        // SeekBar'dan 1-5 arası zorluğu alıyoruz
+        val difficulty = binding.seekBarAddWordDifficulty.progress + 1
+
+        // Not: Burada kategori seçimi eklemediysen varsayılan olarak 1 (General) gönderiyoruz
+        val categoryId = 1
+
+        // Yeni Word nesnesi oluşturma
+        val newWord = Word(
+            id = 0, // SQLite AUTOINCREMENT halledecek
+            english = eng,
+            turkish = tr,
+            phonetic = phonetic,
+            turkishReading = reading,
+            categoryId = categoryId,
+            difficulty = difficulty,
+            imagePath = selectedImageUri,
+            correctCount = 0,
+            repetitionLevel = 0,
+            isLearned = 0
+        )
+
+        // Veritabanına kaydetme (DatabaseHelper'da bu fonksiyonu çağırdığını varsayıyorum)
+        // Eğer addNewWord diye ayrı fonksiyonun yoksa dbHelper.updateWordProgress gibi kullanabilirsin
+        // Şimdilik hazırladığın yapıya göre Toast veriyoruz
+
+        Toast.makeText(this, "$eng kelimesi $difficulty zorluk seviyesiyle hazırlandı!", Toast.LENGTH_LONG).show()
+        finish()
     }
 }

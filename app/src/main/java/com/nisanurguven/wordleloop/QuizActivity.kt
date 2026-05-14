@@ -25,17 +25,10 @@ class QuizActivity : AppCompatActivity() {
 
         dbHelper = DatabaseHelper(this)
 
-        // Veritabanından ayarlara göre filtrelenmiş kelimeleri al
-        wordList = dbHelper.getFilteredWords(this).toMutableList()
+        // Veritabanından ayarlara göre filtrelenmiş kelimeleri yükle
+        loadWords()
 
-        if (wordList.isNotEmpty()) {
-            showNextQuestion()
-        } else {
-            Toast.makeText(this, "Seçilen kriterlere uygun kelime bulunamadı!", Toast.LENGTH_LONG).show()
-            finish()
-        }
-
-        // Pas geçme butonu
+        // Pas geçme butonu mantığı
         binding.btnPass.setOnClickListener {
             if (currentWordIndex < wordList.size) {
                 passedWords.add(wordList[currentWordIndex])
@@ -44,7 +37,19 @@ class QuizActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadWords() {
+        wordList = dbHelper.getFilteredWords(this).toMutableList()
+
+        if (wordList.isNotEmpty()) {
+            showNextQuestion()
+        } else {
+            Toast.makeText(this, "Bugünlük tüm kelimeleri bitirdin veya kriterlere uygun kelime yok!", Toast.LENGTH_LONG).show()
+            finish()
+        }
+    }
+
     private fun showNextQuestion() {
+        // Liste bittiyse pas geçilenlere dön veya quizi bitir
         if (currentWordIndex >= wordList.size) {
             if (passedWords.isNotEmpty()) {
                 wordList = passedWords.toMutableList()
@@ -52,7 +57,7 @@ class QuizActivity : AppCompatActivity() {
                 currentWordIndex = 0
                 showNextQuestion()
             } else {
-                Toast.makeText(this, "Quiz Tamamlandı!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Harika! Quiz tamamlandı.", Toast.LENGTH_SHORT).show()
                 finish()
             }
             return
@@ -66,7 +71,6 @@ class QuizActivity : AppCompatActivity() {
 
         buttons.forEachIndexed { index, button ->
             button.text = options[index]
-            // Stil dosyandaki varsayılan rengine dönmesi için sıfırlama
             button.setBackgroundColor(Color.WHITE)
             button.isEnabled = true
             button.setOnClickListener {
@@ -81,36 +85,18 @@ class QuizActivity : AppCompatActivity() {
 
         if (isCorrect) {
             selectedButton.setBackgroundColor(Color.GREEN)
-            updateWordProgress(currentWord, true)
         } else {
             selectedButton.setBackgroundColor(Color.RED)
-            // Doğru şıkkı da göstererek kullanıcıya yardımcı olalım
-            buttons.forEach {
-                if (it.text == currentWord.turkish) it.setBackgroundColor(Color.GREEN)
-            }
-            updateWordProgress(currentWord, false)
+            // Yanlış cevapta doğru olanı yeşil yakarak göster
+            buttons.forEach { if (it.text == currentWord.turkish) it.setBackgroundColor(Color.GREEN) }
         }
+
+        // Algoritmayı çalıştır ve veritabanını güncelle
+        dbHelper.updateWordProgress(currentWord, isCorrect)
 
         Handler(Looper.getMainLooper()).postDelayed({
             moveToNext()
         }, 1000)
-    }
-
-    private fun updateWordProgress(word: Word, isCorrect: Boolean) {
-        // Algoritma: 6 kez üst üste doğru bilme şartı
-        if (isCorrect) {
-            word.correctCount += 1
-            if (word.correctCount >= 6) {
-                word.repetitionLevel += 1
-                word.correctCount = 0
-                if (word.repetitionLevel >= 6) word.isLearned = 1
-            }
-        } else {
-            word.correctCount = 0
-        }
-
-        // DatabaseHelper içindeki güncel fonksiyonu çağırıyoruz
-        dbHelper.updateWordProgress(word, isCorrect)
     }
 
     private fun moveToNext() {
@@ -119,10 +105,13 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun generateOptions(correctAnswer: String): List<String> {
-        // Geçici olarak sabit seçenekler; ilerde DatabaseHelper'dan rastgele kelime çekebilirsin
-        val wrongOptions = listOf("Masa", "Kalem", "Kitap", "Araba", "Ev", "Su").filter { it != correctAnswer }
-        val randomOptions = wrongOptions.shuffled().take(3).toMutableList()
-        randomOptions.add(correctAnswer)
-        return randomOptions.shuffled()
+        val wrongOptions = listOf("Masa", "Kalem", "Kitap", "Araba", "Ev", "Su", "Kedi", "Köpek")
+            .filter { it != correctAnswer }
+            .shuffled()
+            .take(3)
+            .toMutableList() // Değişken adı burada tanımlanıyor
+
+        wrongOptions.add(correctAnswer) // Yukarıdaki isimle aynı olmalı
+        return wrongOptions.shuffled()
     }
 }
