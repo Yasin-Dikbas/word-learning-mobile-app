@@ -1,5 +1,6 @@
 package com.nisanurguven.wordleloop
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,10 +24,17 @@ class MainActivity : AppCompatActivity() {
         // Tıklama Olayları (İleride buralara startActivity(Intent(...)) eklenecek)
         cardAddWord.setOnClickListener {
             Toast.makeText(this, "Kelime Ekleme Sayfası", Toast.LENGTH_SHORT).show()
+            // View Binding kullandığını varsayarsak:
+            val intent = Intent(this, AddWordActivity::class.java)
+            startActivity(intent)
+
         }
 
         cardQuiz.setOnClickListener {
             Toast.makeText(this, "Quiz Başlatılıyor...", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(this, QuizActivity::class.java)
+            startActivity(intent)
         }
 
         cardWordle.setOnClickListener {
@@ -43,6 +51,9 @@ class MainActivity : AppCompatActivity() {
 
         cardSettings.setOnClickListener {
             Toast.makeText(this, "Ayarlar", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         }
     }
 }

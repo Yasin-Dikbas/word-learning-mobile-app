@@ -61,7 +61,7 @@
             style="@style/MenuCardStyle"
             android:id="@+id/cardAddWord">
             <LinearLayout style="@style/MenuInnerLayoutStyle">
-                <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@android:drawable/ic_menu_add" app:tint="#1A4B8F"/>
+                <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/ic_add" app:tint="#1A4B8F"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kelime Ekle" android:textStyle="bold" android:layout_marginTop="8dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -70,7 +70,7 @@
             style="@style/MenuCardStyle"
             android:id="@+id/cardQuiz">
             <LinearLayout style="@style/MenuInnerLayoutStyle">
-                <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@android:drawable/ic_menu_help" app:tint="#1A4B8F"/>
+                <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/ic_quiz" app:tint="#1A4B8F"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Quiz" android:textStyle="bold" android:layout_marginTop="8dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -79,7 +79,7 @@
             style="@style/MenuCardStyle"
             android:id="@+id/cardWordle">
             <LinearLayout style="@style/MenuInnerLayoutStyle">
-                <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@android:drawable/ic_menu_sort_alphabetically" app:tint="#1A4B8F"/>
+                <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/ic_game" app:tint="#1A4B8F"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Wordle" android:textStyle="bold" android:layout_marginTop="8dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -88,8 +88,8 @@
             style="@style/MenuCardStyle"
             android:id="@+id/cardLLM">
             <LinearLayout style="@style/MenuInnerLayoutStyle">
-                <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@android:drawable/ic_menu_edit" app:tint="#1A4B8F"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="AI Asistan" android:textStyle="bold" android:layout_marginTop="8dp"/>
+                <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/ic_llm" app:tint="#1A4B8F"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LLM" android:textStyle="bold" android:layout_marginTop="8dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -97,7 +97,7 @@
             style="@style/MenuCardStyle"
             android:id="@+id/cardReport">
             <LinearLayout style="@style/MenuInnerLayoutStyle">
-                <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#1A4B8F"/>
+                <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/ic_report" app:tint="#1A4B8F"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Rapor" android:textStyle="bold" android:layout_marginTop="8dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -106,7 +106,7 @@
             style="@style/MenuCardStyle"
             android:id="@+id/cardSettings">
             <LinearLayout style="@style/MenuInnerLayoutStyle">
-                <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@android:drawable/ic_menu_preferences" app:tint="#1A4B8F"/>
+                <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/ic_settings" app:tint="#1A4B8F"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ayarlar" android:textStyle="bold" android:layout_marginTop="8dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>

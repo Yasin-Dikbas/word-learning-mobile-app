@@ -21,4 +21,17 @@
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
     </style>
+
+    <style name="QuizOptionButtonStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#1A4B8F</item>
+        <item name="strokeColor">#1A4B8F</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="backgroundTint">@color/white</item>
+    </style>
 </resources>

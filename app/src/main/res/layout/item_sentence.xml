@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:background="#FDFDFD">
+
+        <!-- İngilizce Cümle Girişi -->
+        <EditText
+            android:id="@+id/etSentenceEng"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Örnek İngilizce Cümle"
+            android:background="@null"
+            android:textSize="15sp"
+            android:textColor="#333333"
+            android:inputType="textCapSentences"
+            android:minHeight="40dp"/>
+
+        <!-- Ayırıcı Çizgi -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE"
+            android:layout_marginVertical="8dp"/>
+
+        <!-- Türkçe Anlam Girişi -->
+        <EditText
+            android:id="@+id/etSentenceTr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cümlenin Türkçe Anlamı"
+            android:background="@null"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:inputType="textCapSentences"
+            android:minHeight="40dp"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

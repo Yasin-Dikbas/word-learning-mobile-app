@@ -33,6 +33,18 @@
             android:name=".MainActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".AddWordActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".QuizActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
