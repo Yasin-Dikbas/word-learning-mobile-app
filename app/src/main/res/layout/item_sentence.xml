@@ -4,16 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
     android:layout_marginBottom="12dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="2dp">
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#FFFFFF">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp"
-        android:background="#FDFDFD">
+        android:padding="16dp">
 
         <!-- İngilizce Cümle Girişi -->
         <EditText
@@ -21,18 +22,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Örnek İngilizce Cümle"
-            android:background="@null"
-            android:textSize="15sp"
-            android:textColor="#333333"
-            android:inputType="textCapSentences"
-            android:minHeight="40dp"/>
+            android:textSize="16sp"
+            android:textColor="#212121"
+            android:background="@android:color/transparent"
+            android:inputType="textCapSentences|textMultiLine"
+            android:minHeight="48dp"
+            android:gravity="top|start" />
 
         <!-- Ayırıcı Çizgi -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#EEEEEE"
-            android:layout_marginVertical="8dp"/>
+            android:background="#E0E0E0"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
 
         <!-- Türkçe Anlam Girişi -->
         <EditText
@@ -40,11 +43,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Cümlenin Türkçe Anlamı"
-            android:background="@null"
             android:textSize="14sp"
-            android:textColor="#666666"
-            android:inputType="textCapSentences"
-            android:minHeight="40dp"/>
+            android:textColor="#757575"
+            android:background="@android:color/transparent"
+            android:inputType="textCapSentences|textMultiLine"
+            android:minHeight="48dp"
+            android:gravity="top|start" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
