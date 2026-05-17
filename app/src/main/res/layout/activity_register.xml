@@ -32,13 +32,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.55">
+        app:layout_constraintVertical_bias="0.5">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="28dp">
+            android:padding="24dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -47,40 +47,73 @@
                 android:textSize="18sp"
                 android:textColor="#566573"
                 android:layout_gravity="center"
-                android:layout_marginBottom="24dp"/>
+                android:layout_marginBottom="16dp"/>
 
             <EditText
                 android:id="@+id/etRegUsername"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
+                android:layout_height="50dp"
                 android:hint="Kullanıcı Adı"
                 android:paddingLeft="18dp"
                 android:background="@drawable/edittext_background"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="8dp"
                 android:inputType="textPersonName"
-                android:textSize="15sp"/>
+                android:textSize="14sp"/>
 
             <EditText
                 android:id="@+id/etRegEmail"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
+                android:layout_height="50dp"
                 android:hint="E-posta"
                 android:paddingLeft="18dp"
                 android:background="@drawable/edittext_background"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="8dp"
                 android:inputType="textEmailAddress"
-                android:textSize="15sp"/>
+                android:textSize="14sp"/>
 
             <EditText
                 android:id="@+id/etRegPassword"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
+                android:layout_height="50dp"
                 android:hint="Şifre"
                 android:paddingLeft="18dp"
                 android:background="@drawable/edittext_background"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="8dp"
                 android:inputType="textPassword"
-                android:textSize="15sp"/>
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/etRegQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Güvenlik Sorusu (Örn: İlk evcil hayvanınız?)"
+                android:paddingLeft="18dp"
+                android:background="@drawable/edittext_background"
+                android:layout_marginBottom="8dp"
+                android:inputType="text"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/etRegAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Güvenlik Cevabı"
+                android:paddingLeft="18dp"
+                android:background="@drawable/edittext_background"
+                android:layout_marginBottom="8dp"
+                android:inputType="text"
+                android:textSize="14sp"/>
+
+            <EditText
+                android:id="@+id/etRegHint"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="İpucu (Cevabı hatırlatacak kısa not)"
+                android:paddingLeft="18dp"
+                android:background="@drawable/edittext_background"
+                android:layout_marginBottom="20dp"
+                android:inputType="text"
+                android:textSize="14sp"/>
 
             <android.widget.Button
                 android:id="@+id/btnRegister"
@@ -102,7 +135,7 @@
         android:textColor="#1A4B8F"
         android:textStyle="bold"
         android:textSize="14sp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:padding="10dp"
         app:layout_constraintTop_toBottomOf="@+id/registerCard"
         app:layout_constraintStart_toStartOf="parent"

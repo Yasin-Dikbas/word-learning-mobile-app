@@ -11,44 +11,51 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Wordleloop">
-
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false" />
         <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
-
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
-
         <activity
             android:name=".MainActivity"
             android:exported="false" />
-
         <activity
             android:name=".AddWordActivity"
             android:exported="false" />
-
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />
-
         <activity
             android:name=".QuizActivity"
             android:exported="false" />
-
         <activity
             android:name=".ReportActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".LLMActivity"
+            android:exported="false" />
+        <activity
+            android:name=".WordleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FlashcardActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

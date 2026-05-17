@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivGeneratedImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_gallery"
+                android:visibility="gone" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardInputs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:layout_constraintTop_toBottomOf="@id/cardImage">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hikaye İçin 5 Kelime Girin"
+                    android:textColor="#6C5CE7"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText android:id="@+id/etWord1" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="1. Kelime" android:backgroundTint="#6C5CE7"/>
+                <EditText android:id="@+id/etWord2" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="2. Kelime" android:backgroundTint="#6C5CE7"/>
+                <EditText android:id="@+id/etWord3" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="3. Kelime" android:backgroundTint="#6C5CE7"/>
+                <EditText android:id="@+id/etWord4" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="4. Kelime" android:backgroundTint="#6C5CE7"/>
+                <EditText android:id="@+id/etWord5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="5. Kelime" android:backgroundTint="#6C5CE7"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardStory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:layout_constraintTop_toBottomOf="@id/cardInputs">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvEnglishStory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="4sp"
+                    android:text="Kelimeleri girin ve sihrin gerçekleşmesini bekleyin!"
+                    android:textColor="#2D3436"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tvTurkishStory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:lineSpacingExtra="4sp"
+                    android:textColor="#636E72"
+                    android:textSize="15sp"
+                    android:textStyle="italic"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <Button
+            android:id="@+id/btnGenerateStory"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#6C5CE7"
+            android:text=" HİKAYE OLUŞTUR"
+            android:textColor="#FFFFFF"
+            app:cornerRadius="12dp"
+            app:layout_constraintTop_toBottomOf="@id/cardStory" />
+
+        <Button
+            android:id="@+id/btnTranslate"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:text="🌍 ÇEVİRİYİ GÖSTER"
+            android:textColor="#6C5CE7"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/btnGenerateStory"
+            app:strokeColor="#6C5CE7" />
+
+        <ProgressBar
+            android:id="@+id/loadingProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:indeterminateTint="#6C5CE7"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

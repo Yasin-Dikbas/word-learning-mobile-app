@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient">
 
+    <ImageButton
+        android:id="@+id/btnSettingsTop"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Ayarlar"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="#1A4B8F" />
+
     <ImageView
         android:id="@+id/ivHomeLogo"
         android:layout_width="220dp"
@@ -39,7 +54,7 @@
                 android:id="@+id/tvStreak"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="🔥 15 Günlük Seri!"
+                android:text="🔥 0 Günlük Seri"
                 android:textColor="#8F1A30"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
@@ -105,10 +120,10 @@
 
         <androidx.cardview.widget.CardView
             style="@style/MenuCardStyle"
-            android:id="@+id/cardSettings">
+            android:id="@+id/cardFlashcards">
             <LinearLayout style="@style/MenuInnerLayoutStyle">
-                <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/ic_settings" app:tint="#1A4B8F"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ayarlar" android:textStyle="bold" android:layout_marginTop="8dp"/>
+                <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/ic_quiz" app:tint="#1A4B8F"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Öğren" android:textStyle="bold" android:layout_marginTop="8dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

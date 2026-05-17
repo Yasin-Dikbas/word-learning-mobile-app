@@ -1,5 +1,6 @@
 package com.nisanurguven.wordleloop
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -14,47 +15,59 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // View Binding kurulumu
+        // --- OTOMATİK GİRİŞ KONTROLÜ ---
+        val sharedPref = getSharedPreferences("WordleLoopPrefs", Context.MODE_PRIVATE)
+        val isLoggedIn = sharedPref.getBoolean("isLoggedIn", false)
+
+        if (isLoggedIn) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+            return // Alt satırları çalıştırma
+        }
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // DatabaseHelper başlatılıyor
         dbHelper = DatabaseHelper(this)
 
-        // GİRİŞ YAP BUTONU TIKLAMA OLAYI
+        // GİRİŞ YAP BUTONU
         binding.btnLogin.setOnClickListener {
-            // Verileri al ve temizle (trim)
             val username = binding.etUsername.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
 
-            // 1. Validasyon: Boş alan kontrolü
             if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Lütfen kullanıcı adı ve şifre giriniz", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Lütfen tüm alanları doldurun", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // 2. Veritabanı Kontrolü (Donmayı önlemek için DatabaseHelper'daki güncel checkUser çalışacak)
             try {
                 val isUserExist = dbHelper.checkUser(username, password)
 
                 if (isUserExist) {
-                    // GİRİŞ BAŞARILI
-                    Toast.makeText(this, "Hoş geldin $username!", Toast.LENGTH_SHORT).show()
+                    // Giriş bilgilerini kaydet (Bir sonraki girişte sormasın)
+                    sharedPref.edit().apply {
+                        putBoolean("isLoggedIn", true)
+                        putString("userName", username)
+                        apply()
+                    }
 
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish() // Giriş sonrası login ekranına dönülmesini engeller
+                    Toast.makeText(this, "Giriş Başarılı!", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
                 } else {
-                    // GİRİŞ HATALI
                     Toast.makeText(this, "Kullanıcı adı veya şifre hatalı!", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
-                // Beklenmedik bir veritabanı hatası olursa uygulamayı çökertmek yerine kullanıcıya bildirir
-                Toast.makeText(this, "Veritabanı hatası oluştu: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Sistem hatası: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
 
-        // KAYIT OL YAZISI TIKLAMA OLAYI
+        // ŞİFREMİ UNUTTUM YAZISI
+        binding.tvForgotPassword.setOnClickListener {
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
+        }
+
+        // KAYIT OL BUTONU
         binding.tvSignUp.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)

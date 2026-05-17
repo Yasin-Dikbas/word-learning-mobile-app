@@ -10,16 +10,19 @@ import com.nisanurguven.wordleloop.databinding.ActivitySettingsBinding
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
+    private lateinit var xpManager: XpManager // XP'yi çekmek için eklendi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Mevcut ayarları yükle (Kullanıcı daha önce ne seçtiyse onu görsün)
+        xpManager = XpManager(this)
+
+        // Mevcut ayarları ve XP durumunu yükle
         loadCurrentSettings()
 
-        // Günlük Kelime Hedefi SeekBar Dinleyicisi
+        // Günlük Kelime Hedefi SeekBar
         binding.seekBarDailyGoal.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 val goal = if (progress == 0) 1 else progress
@@ -29,10 +32,9 @@ class SettingsActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
-        // ZORLUK SEVİYESİ SeekBar Dinleyicisi (1-5 Arası)
+        // Zorluk Seviyesi SeekBar
         binding.seekBarDifficulty.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                // SeekBar 0-4 arası çalışır, biz onu 1-5 yapıyoruz
                 val level = progress + 1
                 binding.tvDifficultyLabel.text = "Zorluk Seviyesi: $level"
             }
@@ -46,45 +48,44 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun loadCurrentSettings() {
+        // XP Görüntüleme: tvTotalXP ID'li bir TextView'ın olduğunu varsayıyoruz
+        binding.tvTotalXP?.text = "Toplam Puanınız: ${xpManager.getXP()} XP"
+
         val sharedPref = getSharedPreferences("LoopWordsSettings", MODE_PRIVATE)
         val currentGoal = sharedPref.getInt("daily_goal", 10)
         val currentDiff = sharedPref.getInt("difficulty", 2)
+        val savedCategories = sharedPref.getString("categories", "")?.split(",") ?: listOf()
 
+        // SeekBar durumlarını yükle
         binding.seekBarDailyGoal.progress = currentGoal
         binding.tvDailyGoalLabel.text = "Günlük Kelime Hedefi: $currentGoal"
 
-        // Zorluk seviyesini yükle (Veritabanındaki 1-5 değerini SeekBar'ın 0-4 aralığına çeviriyoruz)
         binding.seekBarDifficulty.progress = currentDiff - 1
         binding.tvDifficultyLabel.text = "Zorluk Seviyesi: $currentDiff"
+
+        // Kategorileri (Chip) otomatik seçili getir
+        for (i in 0 until binding.chipGroupCategories.childCount) {
+            val chip = binding.chipGroupCategories.getChildAt(i) as Chip
+            val dbId = getDbIdFromChip(chip.id).toString()
+            if (savedCategories.contains(dbId)) {
+                chip.isChecked = true
+            }
+        }
     }
 
     private fun saveSettings() {
         val dailyGoal = if (binding.seekBarDailyGoal.progress == 0) 1 else binding.seekBarDailyGoal.progress
-
-        // ZORLUK: SeekBar'dan gelen 0-4 değerini veritabanı için 1-5 yapıyoruz
         val difficulty = binding.seekBarDifficulty.progress + 1
 
         val selectedCategoryIds = mutableListOf<Int>()
         for (i in 0 until binding.chipGroupCategories.childCount) {
             val chip = binding.chipGroupCategories.getChildAt(i) as Chip
             if (chip.isChecked) {
-                // Chip ID'lerini doğrudan veritabanı ID'lerine eşliyoruz
-                val dbId = when (chip.id) {
-                    R.id.chip_1 -> 1
-                    R.id.chip_2 -> 2
-                    R.id.chip_3 -> 3
-                    R.id.chip_4 -> 4
-                    R.id.chip_5 -> 5
-                    R.id.chip_6 -> 6
-                    R.id.chip_7 -> 7
-                    R.id.chip_8 -> 8
-                    else -> 0
-                }
+                val dbId = getDbIdFromChip(chip.id)
                 if (dbId != 0) selectedCategoryIds.add(dbId)
             }
         }
 
-        // Kayıt İşlemi
         val sharedPref = getSharedPreferences("LoopWordsSettings", MODE_PRIVATE)
         with(sharedPref.edit()) {
             putInt("daily_goal", dailyGoal)
@@ -95,5 +96,20 @@ class SettingsActivity : AppCompatActivity() {
 
         Toast.makeText(this, "Ayarlar başarıyla güncellendi!", Toast.LENGTH_SHORT).show()
         finish()
+    }
+
+    // Chip ID'sini Veritabanı ID'sine çeviren yardımcı fonksiyon
+    private fun getDbIdFromChip(chipId: Int): Int {
+        return when (chipId) {
+            binding.chip1.id -> 1
+            binding.chip2.id -> 2
+            binding.chip3.id -> 3
+            binding.chip4.id -> 4
+            binding.chip5.id -> 5
+            binding.chip6.id -> 6
+            binding.chip7.id -> 7
+            binding.chip8.id -> 8
+            else -> 0
+        }
     }
 }

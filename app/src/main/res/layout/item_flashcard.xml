@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardFront"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="#1E1E1E"
+        app:cardCornerRadius="40dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@drawable/card_dark_stroke">
+
+            <TextView
+                android:id="@+id/tvEnglishWord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="STUNNING"
+                android:textColor="#FFFFFF"
+                android:textSize="54sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tap to flip"
+                android:textSize="16sp"
+                android:textColor="#50FFFFFF"
+                android:layout_marginTop="20dp"
+                android:letterSpacing="0.2"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardBack"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:cardBackgroundColor="#121212"
+        app:cardCornerRadius="40dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <ImageView
+                android:id="@+id/ivWordImage"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:alpha="0.2"
+                android:src="@drawable/ic_image_placeholder"
+                app:tint="#3D5AFE" />
+
+            <TextView
+                android:id="@+id/tvPhonetic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="/ˈstʌn.ɪŋ/"
+                android:textColor="#3D5AFE"
+                android:textSize="28sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/tvTurkishReading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="(stanig)"
+                android:textColor="#4CAF50"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="80dp"
+                android:layout_height="4dp"
+                android:layout_marginVertical="32dp"
+                android:background="#3D5AFE" />
+
+            <TextView
+                android:id="@+id/tvSampleSentence"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="The view was stunning."
+                android:textColor="#FFFFFF"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSampleTurkish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="(Manzara büyüleyiciydi.)"
+                android:textColor="#B0BEC5"
+                android:textSize="22sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

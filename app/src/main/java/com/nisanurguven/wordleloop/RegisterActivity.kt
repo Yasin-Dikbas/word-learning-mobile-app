@@ -1,5 +1,6 @@
 package com.nisanurguven.wordleloop
 
+import android.content.ContentValues
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -9,19 +10,23 @@ import androidx.appcompat.app.AppCompatActivity
 
 class RegisterActivity : AppCompatActivity() {
 
-    // dbHelper'ı burada tanımlamak diğer fonksiyonlardan erişimi kolaylaştırır
     private lateinit var dbHelper: DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        // Veritabanı yardımcısını başlat
         dbHelper = DatabaseHelper(this)
 
         val etUsername = findViewById<EditText>(R.id.etRegUsername)
         val etEmail = findViewById<EditText>(R.id.etRegEmail)
         val etPassword = findViewById<EditText>(R.id.etRegPassword)
+
+        // YENİ ALANLAR (XML'e eklemen gerekenler)
+        val etQuestion = findViewById<EditText>(R.id.etRegQuestion)
+        val etAnswer = findViewById<EditText>(R.id.etRegAnswer)
+        val etHint = findViewById<EditText>(R.id.etRegHint)
+
         val btnRegister = findViewById<Button>(R.id.btnRegister)
         val tvBackToLogin = findViewById<TextView>(R.id.tvBackToLogin)
 
@@ -29,33 +34,36 @@ class RegisterActivity : AppCompatActivity() {
             val user = etUsername.text.toString().trim()
             val email = etEmail.text.toString().trim()
             val pass = etPassword.text.toString().trim()
+            val question = etQuestion.text.toString().trim()
+            val answer = etAnswer.text.toString().trim()
+            val hint = etHint.text.toString().trim()
 
-            if (user.isNotEmpty() && email.isNotEmpty() && pass.isNotEmpty()) {
+            if (user.isNotEmpty() && email.isNotEmpty() && pass.isNotEmpty() &&
+                question.isNotEmpty() && answer.isNotEmpty()) {
 
-                // --- KRİTİK NOKTA: Veritabanına Yazma İşlemi ---
-                val db = dbHelper.writableDatabase // Bu satır veritabanını aktif (Open) hale getirir.
+                val db = dbHelper.writableDatabase
 
-                val values = android.content.ContentValues().apply {
-                    put("username", user) // "username" kısmını DatabaseHelper'daki kolon adınla aynı yap
-                    put("email", email)    // "email" kısmını DatabaseHelper'daki kolon adınla aynı yap
-                    put("password", pass)  // "password" kısmını DatabaseHelper'daki kolon adınla aynı yap
+                val values = ContentValues().apply {
+                    put("userName", user) // DatabaseHelper ile tam uyumlu (N büyük)
+                    put("email", email)
+                    put("password", pass)
+                    put("securityQuestion", question)
+                    put("securityAnswer", answer)
+                    put("securityHint", hint)
+                    put("createdAt", System.currentTimeMillis().toString())
                 }
 
-                // Tablo adının "Users" veya senin DatabaseHelper'da verdiğin isim olduğundan emin ol
                 val success = db.insert("Users", null, values)
 
                 if (success != -1L) {
                     Toast.makeText(this, "Hesap başarıyla oluşturuldu!", Toast.LENGTH_SHORT).show()
                     finish()
                 } else {
-                    Toast.makeText(this, "Kayıt sırasında bir hata oluştu!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Kayıt sırasında bir hata oluştu (Kullanıcı adı alınmış olabilir)!", Toast.LENGTH_SHORT).show()
                 }
 
-                // İşlem bittiğinde db'yi kapatabilirsin (isteğe bağlı ama önerilir)
-                // db.close()
-
             } else {
-                Toast.makeText(this, "Lütfen tüm alanları doldurun", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Lütfen gerekli alanları doldurun", Toast.LENGTH_SHORT).show()
             }
         }
 

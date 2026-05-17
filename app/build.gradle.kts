@@ -48,4 +48,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     implementation("androidx.cardview:cardview:1.0.0")
+    implementation("com.google.ai.client.generativeai:generativeai:0.7.0")
+    implementation("io.coil-kt:coil:2.4.0")
+    implementation("com.github.yuyakaido:CardStackView:2.3.4")
+    implementation("androidx.gridlayout:gridlayout:1.0.0")
+
 }

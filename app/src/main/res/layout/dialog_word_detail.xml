@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@android:color/white"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/ivDetailImage"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/tvDetailEng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="#1A4B8F"/>
+
+    <TextView
+        android:id="@+id/tvDetailPhonetic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#757575"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/tvDetailTr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="#4CAF50"/>
+
+    <TextView
+        android:id="@+id/tvDetailExample"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textAlignment="center"
+        android:textStyle="italic"/>
+
+    <Button
+        android:id="@+id/btnCloseDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Devam Et"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#1A4B8F"/>
+
+</LinearLayout>

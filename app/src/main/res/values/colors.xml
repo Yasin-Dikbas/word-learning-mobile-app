@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="wordle_green">#6AAA64</color>
+    <color name="wordle_yellow">#C9B458</color>
+    <color name="wordle_gray">#787C7E</color>
+    <color name="wordle_wrong">#FF5252</color> <!-- Senin istediğin kırmızı için -->
 </resources>

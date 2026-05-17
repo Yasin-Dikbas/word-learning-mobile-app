@@ -14,6 +14,18 @@
         android:padding="20dp">
 
         <TextView
+            android:id="@+id/tvTotalXP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Toplam Puanınız: 0 XP"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#1A4B8F"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Uygulama Ayarları"
@@ -22,7 +34,6 @@
             android:textColor="#1A4B8F"
             android:layout_marginBottom="24dp"/>
 
-        <!-- Günlük Hedef Kartı -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,7 +67,6 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Kategori Seçimi Kartı -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -143,7 +153,6 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Zorluk Seviyesi Kartı (1-5 Arası Güncellendi) -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -194,6 +203,8 @@
             android:text="AYARLARI KAYDET"
             android:backgroundTint="#1A4B8F"
             android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:cornerRadius="12dp"/>
 
     </LinearLayout>

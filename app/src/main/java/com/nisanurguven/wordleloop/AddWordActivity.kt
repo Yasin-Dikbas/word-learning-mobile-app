@@ -118,7 +118,7 @@ class AddWordActivity : AppCompatActivity() {
             turkishReading = reading,
             categoryId = categoryId,
             difficulty = difficulty,
-            imagePath = selectedImageUri,
+            sampleSentence = " ",
             correctCount = 0,
             repetitionLevel = 0,
             isLearned = 0
