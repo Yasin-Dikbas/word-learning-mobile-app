@@ -103,20 +103,33 @@ class WordleActivity : AppCompatActivity() {
         }
     }
 
+    // Fonksiyon karmaşıklığını (Cognitive Complexity) düşürmek için alt parçalara bölündü
     private fun processGuess(guess: String) {
-        val startIndex = currentAttempt * 5
-        val targetLettersCount = mutableMapOf<Char, Int>()
-        for (char in correctWord) {
-            targetLettersCount[char] = targetLettersCount.getOrDefault(char, 0) + 1
-        }
+        val targetLettersCount = getTargetLettersCount()
+        val letterColors = evaluateGuessColors(guess, targetLettersCount)
 
+        updateWordleUI(guess, letterColors)
+        checkGameState(guess)
+    }
+
+    private fun getTargetLettersCount(): MutableMap<Char, Int> {
+        val counts = mutableMapOf<Char, Int>()
+        for (char in correctWord) {
+            counts[char] = counts.getOrDefault(char, 0) + 1
+        }
+        return counts
+    }
+
+    // NullPointerException hatalarını engellemek için !! operatörleri kaldırıldı ve güvenli çağrılar eklendi
+    private fun evaluateGuessColors(guess: String, targetLettersCount: MutableMap<Char, Int>): Array<Char> {
         val letterColors = Array(5) { 'R' }
 
         // 1. Geçiş: Tam doğru yerler (Yeşil)
         for (i in 0 until 5) {
             if (guess[i] == correctWord[i]) {
                 letterColors[i] = 'G'
-                targetLettersCount[guess[i]] = targetLettersCount[guess[i]]!! - 1
+                val currentCount = targetLettersCount.getOrDefault(guess[i], 0)
+                targetLettersCount[guess[i]] = currentCount - 1
             }
         }
 
@@ -124,13 +137,19 @@ class WordleActivity : AppCompatActivity() {
         for (i in 0 until 5) {
             if (letterColors[i] == 'G') continue
             val char = guess[i]
-            if (targetLettersCount.containsKey(char) && targetLettersCount[char]!! > 0) {
+            val charCount = targetLettersCount.getOrDefault(char, 0)
+
+            if (charCount > 0) {
                 letterColors[i] = 'O'
-                targetLettersCount[char] = targetLettersCount[char]!! - 1
+                targetLettersCount[char] = charCount - 1
             }
         }
 
-        // UI Güncelleme (İpucu kontrolü ile)
+        return letterColors
+    }
+
+    private fun updateWordleUI(guess: String, letterColors: Array<Char>) {
+        val startIndex = currentAttempt * 5
         for (i in 0 until 5) {
             val boxIndex = startIndex + i
             val textView = letterBoxes[boxIndex]
@@ -140,7 +159,7 @@ class WordleActivity : AppCompatActivity() {
                     it.text = guess[i].toString()
                     it.setTextColor(Color.WHITE)
                 } else {
-                    // İpucu ise harfe dokunma ama rengini beyaz yap (Arka plan gelince daha iyi durur)
+                    // İpucu ise harfe dokunma ama rengini beyaz yap
                     it.setTextColor(Color.WHITE)
                 }
 
@@ -151,8 +170,9 @@ class WordleActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
-        // Oyun Bitti Kontrolü
+    private fun checkGameState(guess: String) {
         if (guess == correctWord) {
             isGameOver = true
             val earnedXp = calculateXp()
