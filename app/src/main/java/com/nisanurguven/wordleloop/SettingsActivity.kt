@@ -28,8 +28,12 @@ class SettingsActivity : AppCompatActivity() {
                 val goal = if (progress == 0) 1 else progress
                 binding.tvDailyGoalLabel.text = "Günlük Kelime Hedefi: $goal"
             }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // Kaydırma işlemi başladığında özel bir işlem yapılmasına gerek yok
+            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                // Kaydırma işlemi bittiğinde özel bir işlem yapılmasına gerek yok
+            }
         })
 
         // Zorluk Seviyesi SeekBar
@@ -38,8 +42,12 @@ class SettingsActivity : AppCompatActivity() {
                 val level = progress + 1
                 binding.tvDifficultyLabel.text = "Zorluk Seviyesi: $level"
             }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // Kaydırma işlemi başladığında özel bir işlem yapılmasına gerek yok
+            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                // Kaydırma işlemi bittiğinde özel bir işlem yapılmasına gerek yok
+            }
         })
 
         binding.btnSaveSettings.setOnClickListener {
