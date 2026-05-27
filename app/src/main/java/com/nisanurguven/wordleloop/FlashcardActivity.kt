@@ -109,9 +109,23 @@ class FlashcardActivity : AppCompatActivity(), CardStackListener {
         }
     }
 
-    override fun onCardAppeared(view: View?, position: Int) {}
-    override fun onCardDisappeared(view: View?, position: Int) {}
-    override fun onCardDragging(direction: Direction?, ratio: Float) {}
-    override fun onCardRewound() {}
-    override fun onCardCanceled() {}
+    override fun onCardAppeared(view: View?, position: Int) {
+        // CardStackListener zorunlu kıldığı için eklendi, işlem yapılmıyor.
+    }
+
+    override fun onCardDisappeared(view: View?, position: Int) {
+        // CardStackListener zorunlu kıldığı için eklendi, işlem yapılmıyor.
+    }
+
+    override fun onCardDragging(direction: Direction?, ratio: Float) {
+        // CardStackListener zorunlu kıldığı için eklendi, işlem yapılmıyor.
+    }
+
+    override fun onCardRewound() {
+        // CardStackListener zorunlu kıldığı için eklendi, işlem yapılmıyor.
+    }
+
+    override fun onCardCanceled() {
+        // CardStackListener zorunlu kıldığı için eklendi, işlem yapılmıyor.
+    }
 }
