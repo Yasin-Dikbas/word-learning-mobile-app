@@ -1,1 +1,0 @@
-# word-learning-mobile-app
