@@ -12,7 +12,6 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Çıktı alınacak içerik alanı -->
         <LinearLayout
             android:id="@+id/reportContent"
             android:layout_width="match_parent"
@@ -26,10 +25,9 @@
                 android:text="Gelişim ve Başarı Raporu"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="#1A4B8F"
+                android:textColor="#0C2EC8"
                 android:layout_marginBottom="20dp"/>
 
-            <!-- Genel Başarı Kartı -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,7 +46,7 @@
                         android:layout_height="wrap_content"
                         android:text="%0"
                         android:textSize="48sp"
-                        android:textColor="#1A4B8F"
+                        android:textColor="#0C2EC8"
                         android:textStyle="bold"/>
                     <TextView
                         android:layout_width="wrap_content"
@@ -59,7 +57,6 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Kritik Aşama Analizi -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,14 +87,13 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Kategorisel Gelişim Listesi -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Kategori Bazlı Detaylar"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#1A4B8F"
+                android:textColor="#0C2EC8"
                 android:layout_marginBottom="10dp"/>
 
             <TextView
@@ -113,15 +109,14 @@
 
         </LinearLayout>
 
-        <!-- Kaydetme Butonu -->
         <Button
             android:id="@+id/btnPrintReport"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="20dp"
-            android:text="RAPORU GÖRÜNTÜ OLARAK KAYDET"
-            android:backgroundTint="#1A4B8F"
+            android:text="RAPORU PDF OLARAK YAZDIR"
+            android:backgroundTint="#0C2EC8"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             app:cornerRadius="15dp"/>

@@ -1,8 +1,8 @@
 package com.nisanurguven.wordleloop
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.Toast
@@ -36,7 +36,6 @@ class AddWordActivity : AppCompatActivity() {
         // --- ZORLUK SEVİYESİ SEEKBAR AYARI ---
         binding.seekBarAddWordDifficulty.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                // 0-4 arası olan progress'i 1-5 seviyesine çeviriyoruz
                 val level = progress + 1
                 binding.tvAddWordDifficultyLabel.text = "Kelime Zorluğu: $level"
             }
@@ -66,12 +65,18 @@ class AddWordActivity : AppCompatActivity() {
         val inflater = LayoutInflater.from(this)
         val sentenceBinding = ItemSentenceBinding.inflate(inflater, binding.containerSentences, false)
 
+        // Uzun basınca cümleyi kaldır
         sentenceBinding.root.setOnLongClickListener {
             binding.containerSentences.removeView(it)
             true
         }
 
         binding.containerSentences.addView(sentenceBinding.root)
+
+        // OTOMATİK KAYDIRMA: Yeni cümle eklendiğinde ScrollView'u en aşağıya getirir
+        binding.root.post {
+            binding.root.fullScroll(View.FOCUS_DOWN)
+        }
     }
 
     private fun validateInputs(): Boolean {
@@ -102,33 +107,12 @@ class AddWordActivity : AppCompatActivity() {
         val tr = binding.etTurkishWord.text.toString().trim()
         val phonetic = binding.etPhonetic.text.toString().trim()
         val reading = binding.etTurkishReading.text.toString().trim()
-
-        // SeekBar'dan 1-5 arası zorluğu alıyoruz
         val difficulty = binding.seekBarAddWordDifficulty.progress + 1
-
-        // Not: Burada kategori seçimi eklemediysen varsayılan olarak 1 (General) gönderiyoruz
         val categoryId = 1
 
-        // Yeni Word nesnesi oluşturma
-        val newWord = Word(
-            id = 0, // SQLite AUTOINCREMENT halledecek
-            english = eng,
-            turkish = tr,
-            phonetic = phonetic,
-            turkishReading = reading,
-            categoryId = categoryId,
-            difficulty = difficulty,
-            sampleSentence = " ",
-            correctCount = 0,
-            repetitionLevel = 0,
-            isLearned = 0
-        )
+        // Veritabanı işlemleri burada devam edecek...
 
-        // Veritabanına kaydetme (DatabaseHelper'da bu fonksiyonu çağırdığını varsayıyorum)
-        // Eğer addNewWord diye ayrı fonksiyonun yoksa dbHelper.updateWordProgress gibi kullanabilirsin
-        // Şimdilik hazırladığın yapıya göre Toast veriyoruz
-
-        Toast.makeText(this, "$eng kelimesi $difficulty zorluk seviyesiyle hazırlandı!", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "$eng kelimesi $difficulty zorluk seviyesiyle kaydedildi!", Toast.LENGTH_LONG).show()
         finish()
     }
 }

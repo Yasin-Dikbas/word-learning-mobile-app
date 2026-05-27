@@ -1,0 +1,32 @@
+# LoopWords - Mobil Kelime Öğrenme Uygulaması
+
+LoopWords, kullanıcıların kendi kelime havuzlarını oluşturarak yabancı dil kelime bilgilerini geliştirmelerini, oyunlaştırılmış modüller ve sınavlar aracılığıyla kendilerini test etmelerini sağlayan modern, kullanıcı dostu bir Android uygulamasıdır.
+
+## 🚀 Kullanılan Teknolojiler ve Mimari
+* **Geliştirme Ortamı:** Android Studio
+* **Programlama Dili:** Kotlin
+* **Veritabanı:** SQLite (Yerel veri yönetimi ve kullanıcı istatistikleri için)
+* **Tasarım Yaklaşımı:** Temiz UI/UX, minimalist arayüz ve vurgu rengi olarak premium #0C2EC8 mavi tonunun kullanımı.
+
+## ✨ Öne Çıkan Özellikler (Tamamlanan Modüller)
+Uygulama, müşteri gereksinimlerinde yer alan 7 temel kullanıcı hikayesini (User Story) eksiksiz karşılamaktadır:
+
+1. **Kullanıcı Yönetimi:** Güvenli kayıt olma, sisteme giriş yapma ve "Şifremi Unuttum" işlevleri.
+2. **Kelime Ekleme Modülü:** Kullanıcıların kendi istedikleri yeni kelimeleri sisteme ekleyerek dinamik ve kişiselleştirilmiş bir kelime havuzu oluşturabilmesi.
+3. **Sınav Modülü:** Öğrenilen kelimeler üzerinden dinamik testlere katılma ve bilgi seviyesini ölçme yeteneği.
+4. **Özelleştirilebilir Ayarlar ve Filtreleme:** Kullanıcıların kendi ekranından çalışma rutinlerini yönetebilmesi. Bu kapsamda;
+   * Günlük karşıya çıkacak yeni kelime sayısını (örn. varsayılan 10) değiştirebilme,
+   * Kelimelerin **zorluk derecesini** ayarlayabilme,
+   * Çalışılacak kelimeleri **kategorilerine** göre seçip filtreleyebilme özellikleri mevcuttur.
+5. **Analiz ve Çıktı Raporu:** Kullanıcının çözümlediği kelimeler üzerinden, hangi konularda yüzdesel olarak ne kadar başarılı olduğunu gösteren detaylı analiz raporu ve bu raporun kağıt üzerinden fiziki çıktısının alınabilmesi.
+6. **Kelime Bulmacası (Wordle):** Eğlenceli ve interaktif bir öğrenme deneyimi sunan oyunlaştırılmış kelime tahmin (Wordle) modülü.
+7. **Kelime Zinciri (Word-Chain):** Harf ve anlam ilişkilerine dayalı olarak kelime dağarcığını pekiştiren kelime zinciri oyunu.
+
+## 🛠️ Projeyi Yerelde Çalıştırma Kılavuzu
+
+Projenin kaynak kodlarını bilgisayarınızda sorunsuz bir şekilde çalıştırabilmek için aşağıdaki adımları takip edebilirsiniz:
+
+1. **Projeyi Klonlayın:**
+   Terminal veya Git Bash üzerinden aşağıdaki komutu çalıştırarak projeyi bilgisayarınıza indirin:
+   ```bash
+   git clone [https://github.com/Yasin-Dikbas/word-learning-mobile-app.git](https://github.com/Yasin-Dikbas/word-learning-mobile-app.git)

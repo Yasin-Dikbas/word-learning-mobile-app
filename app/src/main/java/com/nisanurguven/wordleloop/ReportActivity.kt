@@ -1,14 +1,20 @@
 package com.nisanurguven.wordleloop
 
-import android.graphics.Bitmap
+import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.pdf.PdfDocument
 import android.os.Bundle
-import android.view.View
+import android.os.CancellationSignal
+import android.os.ParcelFileDescriptor
+import android.print.PageRange
+import android.print.PrintAttributes
+import android.print.PrintDocumentAdapter
+import android.print.PrintDocumentInfo
+import android.print.PrintManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.nisanurguven.wordleloop.databinding.ActivityReportBinding
-import java.io.File
 import java.io.FileOutputStream
 
 class ReportActivity : AppCompatActivity() {
@@ -23,25 +29,18 @@ class ReportActivity : AppCompatActivity() {
 
         dbHelper = DatabaseHelper(this)
 
-        // Verileri yükle
         loadStatistics()
 
-        // Çıktı alma butonu
         binding.btnPrintReport.setOnClickListener {
-            saveReportImage()
+            printReportAsPdf()
         }
     }
 
     private fun loadStatistics() {
-        // DatabaseHelper'dan ham veriyi al
         val reportData = dbHelper.getFullReportData()
-
-        // KRİTİK KONTROL: Eğer toplam kelime sayısı 0 ise modül aktif değildir mesajı verilir.
-        // reportData içinde "totalWords" değerinin döndüğünü varsayıyoruz.
         val categoryList = reportData["categoryProgress"] as? List<String>
 
         if (categoryList.isNullOrEmpty()) {
-            // Eğer veri yoksa görsel olarak kullanıcıyı bilgilendir
             binding.tvOverallPercentage.text = "%0"
             binding.tvCategoryStats.text = "Raporlama modülü henüz aktif değil.\nLütfen önce kelime yüklendiğinden emin olun."
             binding.btnPrintReport.isEnabled = false
@@ -49,53 +48,79 @@ class ReportActivity : AppCompatActivity() {
             return
         }
 
-        // Genel başarı yüzdesini yansıt
         binding.tvOverallPercentage.text = "%${reportData["overallPercentage"] ?: 0}"
-
-        // Hata yapılan aşama analizini yansıt
         binding.tvMostFailedStage.text = reportData["mostFailedStage"]?.toString() ?: "Veri Yok"
-
-        // Kategori listesini yüzdeleriyle birlikte formatlayarak göster
         binding.tvCategoryStats.text = categoryList.joinToString("\n")
 
-        // Veri varsa butonu aktif et
         binding.btnPrintReport.isEnabled = true
         binding.btnPrintReport.alpha = 1.0f
     }
 
-    private fun saveReportImage() {
-        // Rapor içeriğini barındıran View (ConstraintLayout veya ScrollView)
+    private fun printReportAsPdf() {
         val view = binding.reportContent
 
         if (view.width <= 0 || view.height <= 0) {
-            Toast.makeText(this, "Rapor yükleniyor, lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Rapor yükleniyor, lütfen biraz bekleyip tekrar deneyin.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Bitmap oluştur
-        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
+        val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
+        val jobName = "${getString(R.string.app_name)} Basari Raporu"
 
-        // Eğer arka plan şeffaf çıkarsa beyaz ile doldur (Paylaşırken daha iyi görünür)
-        val bgDrawable = view.background
-        if (bgDrawable != null) {
-            bgDrawable.draw(canvas)
-        } else {
-            canvas.drawColor(Color.WHITE)
-        }
+        printManager.print(jobName, object : PrintDocumentAdapter() {
+            private var pdfDocument: PdfDocument? = null
 
-        view.draw(canvas)
-
-        try {
-            // Galeri yerine uygulama klasörüne kaydeder
-            val file = File(getExternalFilesDir(null), "LoopWords_Basari_Raporu.png")
-            FileOutputStream(file).use { out ->
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+            override fun onLayout(
+                oldAttributes: PrintAttributes?,
+                newAttributes: PrintAttributes,
+                cancellationSignal: CancellationSignal?,
+                callback: LayoutResultCallback,
+                extras: Bundle?
+            ) {
+                pdfDocument = PdfDocument()
+                val info = PrintDocumentInfo.Builder(jobName)
+                    .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
+                    .setPageCount(1)
+                    .build()
+                callback.onLayoutFinished(info, newAttributes != oldAttributes)
             }
-            Toast.makeText(this, "Rapor başarıyla kaydedildi:\n${file.name}", Toast.LENGTH_LONG).show()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "Rapor kaydedilirken bir hata oluştu!", Toast.LENGTH_SHORT).show()
-        }
+
+            override fun onWrite(
+                pages: Array<out PageRange>?,
+                destination: ParcelFileDescriptor,
+                cancellationSignal: CancellationSignal?,
+                callback: WriteResultCallback?
+            ) {
+                pdfDocument?.let { doc ->
+                    // View boyutlarına göre PDF sayfasını oluştur
+                    val pageInfo = PdfDocument.PageInfo.Builder(view.width, view.height, 1).create()
+                    val page = doc.startPage(pageInfo)
+                    val canvas: Canvas = page.canvas
+
+                    // Arka planı beyaz yap (PDF şeffaf çıkmasın diye)
+                    val bgDrawable = view.background
+                    if (bgDrawable != null) {
+                        bgDrawable.draw(canvas)
+                    } else {
+                        canvas.drawColor(Color.WHITE)
+                    }
+
+                    // Görünümü Canvas üzerine çiz
+                    view.draw(canvas)
+                    doc.finishPage(page)
+
+                    try {
+                        doc.writeTo(FileOutputStream(destination.fileDescriptor))
+                        callback?.onWriteFinished(arrayOf(PageRange.ALL_PAGES))
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        callback?.onWriteFailed(e.toString())
+                    } finally {
+                        doc.close()
+                        pdfDocument = null
+                    }
+                }
+            }
+        }, null)
     }
 }

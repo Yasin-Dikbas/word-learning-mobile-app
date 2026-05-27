@@ -10,13 +10,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp">
+        android:paddingBottom="40dp">
 
-        <!-- Başlık ve Logo -->
         <ImageView
             android:id="@+id/ivSmallLogo"
             android:layout_width="160dp"
             android:layout_height="120dp"
+            android:layout_marginTop="20dp"
             android:src="@drawable/loop_words_logo"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -25,12 +25,12 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_margin="20dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="8dp"
             app:layout_constraintTop_toBottomOf="@id/ivSmallLogo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="20dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -48,14 +48,12 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="20dp"/>
 
-                <!-- Resim Ekleme Alanı -->
                 <FrameLayout
                     android:id="@+id/frameImagePicker"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:background="@drawable/edittext_background"
                     android:layout_marginBottom="16dp">
-
                     <ImageView
                         android:id="@+id/ivSelectedImage"
                         android:layout_width="match_parent"
@@ -65,7 +63,6 @@
                         app:tint="#D1D1D1" />
                 </FrameLayout>
 
-                <!-- Temel Giriş Alanları -->
                 <EditText
                     android:id="@+id/etEnglishWord"
                     android:layout_width="match_parent"
@@ -90,38 +87,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:baselineAligned="false"
                     android:layout_marginBottom="12dp">
-
                     <EditText
                         android:id="@+id/etPhonetic"
                         android:layout_width="0dp"
                         android:layout_height="55dp"
                         android:layout_weight="1"
-                        android:hint="Fonetik (IPA) *"
+                        android:hint="Fonetik"
                         android:background="@drawable/edittext_background"
                         android:paddingHorizontal="15dp"
                         android:layout_marginEnd="6dp"
                         android:inputType="text"/>
-
                     <EditText
                         android:id="@+id/etTurkishReading"
                         android:layout_width="0dp"
                         android:layout_height="55dp"
                         android:layout_weight="1"
-                        android:hint="Türkçe Okunuş *"
+                        android:hint="Okunuş"
                         android:background="@drawable/edittext_background"
                         android:paddingHorizontal="15dp"
                         android:layout_marginStart="6dp"
                         android:inputType="text"/>
                 </LinearLayout>
-
-                <!-- ZORLUK SEVİYESİ SEÇİMİ (Yeni Eklendi) -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#EEEEEE"
-                    android:layout_marginVertical="12dp"/>
 
                 <TextView
                     android:id="@+id/tvAddWordDifficultyLabel"
@@ -135,38 +122,24 @@
                     android:id="@+id/seekBarAddWordDifficulty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:max="4"
                     android:progress="2"
                     android:progressTint="#1A4B8F"
                     android:thumbTint="#1A4B8F"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="12dp"
-                    android:layout_marginBottom="16dp">
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="1 (Kolay)" android:textSize="11sp"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="5 (Zor)" android:textSize="11sp"/>
-                </LinearLayout>
-
-                <!-- Dinamik Cümle Alanı -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Örnek Cümleler *"
                     android:textStyle="bold"
                     android:textColor="#333333"
-                    android:layout_marginBottom="8dp"/>
+                    android:layout_marginTop="16dp"/>
 
                 <LinearLayout
                     android:id="@+id/containerSentences"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <!-- Dinamik olarak AddWordActivity.kt içinde dolacak -->
-                </LinearLayout>
+                    android:orientation="vertical" />
 
                 <Button
                     android:id="@+id/btnAddSentence"
@@ -175,10 +148,8 @@
                     android:layout_height="wrap_content"
                     android:text="+ Yeni Cümle Ekle"
                     android:textColor="#1A4B8F"
-                    android:textAllCaps="false"
-                    android:padding="0dp"/>
+                    android:textAllCaps="false"/>
 
-                <!-- Kaydet Butonu -->
                 <Button
                     android:id="@+id/btnSaveWord"
                     android:layout_width="match_parent"
@@ -187,8 +158,7 @@
                     android:text="KELİMEYİ KAYDET"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold"
-                    android:backgroundTint="#1A4B8F"
-                    app:cornerRadius="15dp"/>
+                    android:backgroundTint="#1A4B8F" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

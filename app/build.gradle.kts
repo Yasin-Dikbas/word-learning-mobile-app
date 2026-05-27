@@ -4,14 +4,7 @@ plugins {
 
 android {
     namespace = "com.nisanurguven.wordleloop"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-        buildFeatures {
-            viewBinding = true
-        }
-    }
+    compileSdk = 36 // Hatalı blok temizlendi, stabil sürüme sabitlendi
 
     defaultConfig {
         applicationId = "com.nisanurguven.wordleloop"
@@ -21,6 +14,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // local.properties içindeki API anahtarını güvenli ve hatasız çekme yöntemi
+        val apiKey = project.findProperty("GEMINI_API_KEY") as? String ?: ""
+        buildConfigField("String", "GEMINI_API_KEY", "\"$apiKey\"")
+    }
+
+    // Dağınık olan özellikler tek bir çatı altında toplandı
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
     }
 
     buildTypes {
@@ -32,6 +35,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -47,10 +51,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+
+    // Projene özel kütüphaneler
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.google.ai.client.generativeai:generativeai:0.7.0")
     implementation("io.coil-kt:coil:2.4.0")
     implementation("com.github.yuyakaido:CardStackView:2.3.4")
     implementation("androidx.gridlayout:gridlayout:1.0.0")
-
 }

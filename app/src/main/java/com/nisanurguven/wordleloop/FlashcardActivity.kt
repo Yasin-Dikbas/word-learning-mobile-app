@@ -24,22 +24,16 @@ class FlashcardActivity : AppCompatActivity(), CardStackListener {
         dbHelper = DatabaseHelper(this)
         xpManager = XpManager(this)
 
-        // 1. Ayarlardaki filtreye göre kelimeleri yükle
         loadWordsWithFilter()
-
-        // 2. Kart mekanizmasını kur
         setupCardStack()
-
-        // 3. Butonları bağla
         setupButtons()
     }
 
     private fun loadWordsWithFilter() {
-        // DatabaseHelper'daki akıllı filtreleme metodunu kullanıyoruz
         wordList = dbHelper.getFilteredWords(this).toMutableList()
 
         if (wordList.isEmpty()) {
-            Toast.makeText(this, "Seçilen kriterlerde yeni kelime bulunamadı!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Öğrenilecek yeni kelime kalmadı. Raporlarınızı kontrol edebilirsiniz!", Toast.LENGTH_LONG).show()
             finish()
         }
     }
@@ -53,7 +47,7 @@ class FlashcardActivity : AppCompatActivity(), CardStackListener {
             setSwipeThreshold(0.3f)
             setMaxDegree(20.0f)
             setDirections(Direction.HORIZONTAL)
-            setCanScrollHorizontal(true) // Hem kaydırma hem buton aktif
+            setCanScrollHorizontal(true)
             setCanScrollVertical(false)
         }
 
@@ -62,7 +56,6 @@ class FlashcardActivity : AppCompatActivity(), CardStackListener {
     }
 
     private fun setupButtons() {
-        // BİLİYORUM BUTONU (Yeşil - Sağ)
         binding.btnKnow.setOnClickListener {
             val setting = SwipeAnimationSetting.Builder()
                 .setDirection(Direction.Right)
@@ -73,7 +66,6 @@ class FlashcardActivity : AppCompatActivity(), CardStackListener {
             binding.cardStackView.swipe()
         }
 
-        // BİLMİYORUM BUTONU (Kırmızı - Sol)
         binding.btnDontKnow.setOnClickListener {
             val setting = SwipeAnimationSetting.Builder()
                 .setDirection(Direction.Left)
@@ -86,29 +78,37 @@ class FlashcardActivity : AppCompatActivity(), CardStackListener {
     }
 
     override fun onCardSwiped(direction: Direction?) {
-        val position = manager.topPosition - 1
-        if (position >= 0 && position < wordList.size) {
-            val currentWord = wordList[position]
+        // ÖNEMLİ DÜZELTME: CardStackView swipe olunca topPosition artmış olur,
+        // bu yüzden swiped edilen kartın pozisyonu her zaman topPosition - 1'dir.
+        val swipedPosition = manager.topPosition - 1
+
+        if (swipedPosition >= 0 && swipedPosition < wordList.size) {
+            val currentWord = wordList[swipedPosition]
 
             if (direction == Direction.Right) {
-                // BİLİYORUM: 6 tekrarlı döngüde bir üst aşamaya taşı
+                // Sağ - Biliyorum: İlerlemeyi kaydet
                 dbHelper.updateWordProgress(currentWord, true)
                 xpManager.addXP(10)
                 Toast.makeText(this, "Harika! +10 XP", Toast.LENGTH_SHORT).show()
-            } else {
-                // BİLMİYORUM: Döngüyü sıfırla/düşür ve kelimeyi listenin sonuna tekrar ekle
+            } else if (direction == Direction.Left) {
+                // Sol - Bilmiyorum: Aşamayı sıfırla
                 dbHelper.updateWordProgress(currentWord, false)
 
-                // Kelimeyi öğrenene kadar döngüde tutmak için listenin sonuna ekliyoruz
+                // Kartı tekrar destenin sonuna ekle
                 wordList.add(currentWord)
                 binding.cardStackView.adapter?.notifyItemInserted(wordList.size - 1)
 
                 Toast.makeText(this, "Tekrar karşına çıkacak", Toast.LENGTH_SHORT).show()
             }
         }
+
+        // Deste tamamen bittiğinde
+        if (manager.topPosition == wordList.size) {
+            Toast.makeText(this, "Bugünkü kelimeleri tamamladın!", Toast.LENGTH_LONG).show()
+            finish() // Aktiviteyi kapatıp ana menüye dön
+        }
     }
 
-    // Kullanılmayan zorunlu metotlar
     override fun onCardAppeared(view: View?, position: Int) {}
     override fun onCardDisappeared(view: View?, position: Int) {}
     override fun onCardDragging(direction: Direction?, ratio: Float) {}

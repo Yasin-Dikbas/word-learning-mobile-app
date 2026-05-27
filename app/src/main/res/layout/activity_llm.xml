@@ -1,135 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA"
-    android:fillViewport="true">
+    android:background="#F4F5F7"
+    android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardImage"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp">
+
+                <ImageView
+                    android:id="@+id/ivGeneratedImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/ic_menu_gallery"
+                    android:visibility="gone" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardInputs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hikaye İçin 5 Kelime Girin"
+                        android:textColor="#0C2EC8"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp"/>
+
+                    <EditText android:id="@+id/etWord1" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="1. Kelime" android:backgroundTint="#0C2EC8" android:singleLine="true"/>
+                    <EditText android:id="@+id/etWord2" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="2. Kelime" android:backgroundTint="#0C2EC8" android:singleLine="true"/>
+                    <EditText android:id="@+id/etWord3" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="3. Kelime" android:backgroundTint="#0C2EC8" android:singleLine="true"/>
+                    <EditText android:id="@+id/etWord4" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="4. Kelime" android:backgroundTint="#0C2EC8" android:singleLine="true"/>
+                    <EditText android:id="@+id/etWord5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="5. Kelime" android:backgroundTint="#0C2EC8" android:singleLine="true"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardStory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/tvEnglishStory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="6sp"
+                        android:text="Kelimeleri girin ve yapay zekanın yaratıcılığını izleyin."
+                        android:textColor="#2D3436"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tvTurkishStory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:lineSpacingExtra="6sp"
+                        android:textColor="#0C2EC8"
+                        android:textSize="15sp"
+                        android:textStyle="italic"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <ProgressBar
+                android:id="@+id/loadingProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"
+                android:indeterminateTint="#0C2EC8" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp">
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardImage"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/ivGeneratedImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@android:drawable/ic_menu_gallery"
-                android:visibility="gone" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardInputs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:layout_constraintTop_toBottomOf="@id/cardImage">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Hikaye İçin 5 Kelime Girin"
-                    android:textColor="#6C5CE7"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp"/>
-
-                <EditText android:id="@+id/etWord1" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="1. Kelime" android:backgroundTint="#6C5CE7"/>
-                <EditText android:id="@+id/etWord2" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="2. Kelime" android:backgroundTint="#6C5CE7"/>
-                <EditText android:id="@+id/etWord3" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="3. Kelime" android:backgroundTint="#6C5CE7"/>
-                <EditText android:id="@+id/etWord4" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="4. Kelime" android:backgroundTint="#6C5CE7"/>
-                <EditText android:id="@+id/etWord5" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="5. Kelime" android:backgroundTint="#6C5CE7"/>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardStory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:layout_constraintTop_toBottomOf="@id/cardInputs">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/tvEnglishStory"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="4sp"
-                    android:text="Kelimeleri girin ve sihrin gerçekleşmesini bekleyin!"
-                    android:textColor="#2D3436"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:id="@+id/tvTurkishStory"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:lineSpacingExtra="4sp"
-                    android:textColor="#636E72"
-                    android:textSize="15sp"
-                    android:textStyle="italic"
-                    android:visibility="gone" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp"
+        android:background="#F4F5F7">
 
         <Button
             android:id="@+id/btnGenerateStory"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="#6C5CE7"
-            android:text=" HİKAYE OLUŞTUR"
+            android:layout_height="60dp"
+            android:backgroundTint="#0C2EC8"
+            android:text="✨ HİKAYE VE GÖRSEL OLUŞTUR"
+            android:textStyle="bold"
             android:textColor="#FFFFFF"
-            app:cornerRadius="12dp"
-            app:layout_constraintTop_toBottomOf="@id/cardStory" />
+            app:cornerRadius="16dp" />
+
+        <LinearLayout
+            android:id="@+id/layoutActionButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btnTranslate"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:text="🌍 ÇEVİRİ"
+                android:textColor="#0C2EC8"
+                android:visibility="gone"
+                app:cornerRadius="12dp"
+                app:strokeColor="#0C2EC8" />
+
+            <Button
+                android:id="@+id/btnSaveImage"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="55dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:text="💾 KAYDET"
+                android:textColor="#0C2EC8"
+                android:visibility="gone"
+                app:cornerRadius="12dp"
+                app:strokeColor="#0C2EC8" />
+        </LinearLayout>
 
         <Button
-            android:id="@+id/btnTranslate"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:id="@+id/btnViewGallery"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="10dp"
-            android:text="🌍 ÇEVİRİYİ GÖSTER"
-            android:textColor="#6C5CE7"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/btnGenerateStory"
-            app:strokeColor="#6C5CE7" />
-
-        <ProgressBar
-            android:id="@+id/loadingProgress"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:indeterminateTint="#6C5CE7"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="4dp"
+            android:text="🖼️ Kaydedilen Görselleri Aç"
+            android:textColor="#636E72" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+    </LinearLayout>
+</LinearLayout>

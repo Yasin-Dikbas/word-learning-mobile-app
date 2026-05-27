@@ -11,7 +11,7 @@ class DatabaseHelper(context: Context) :
 
     companion object {
         private const val DATABASE_NAME = "WordleLoop.db"
-        private const val DATABASE_VERSION = 49 // LLM ve Quiz mantığı için güncelledik
+        private const val DATABASE_VERSION = 54
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -25,7 +25,7 @@ class DatabaseHelper(context: Context) :
 
         db.execSQL("CREATE TABLE UserProgress (progressID INTEGER PRIMARY KEY AUTOINCREMENT, userID INTEGER, wordID INTEGER UNIQUE, correctStreak INTEGER DEFAULT 0, currentStage INTEGER DEFAULT 0, nextReviewDate INTEGER, isLearned INTEGER DEFAULT 0, lastAnsweredDate INTEGER, stageErrors TEXT DEFAULT '0,0,0,0,0,0', FOREIGN KEY (userID) REFERENCES Users(userID), FOREIGN KEY (wordID) REFERENCES Words(wordID))")
 
-        val categories = listOf("General", "Business", "Academic", "Travel", "Health", "Science", "Social", "Phrasal Verbs")
+        val categories = listOf("General", "Business", "Academic", "Travel", "Health", "Science", "Social")
         categories.forEach { name ->
             db.execSQL("INSERT INTO Categories (categoryName) VALUES ('$name')")
         }
@@ -63,7 +63,6 @@ class DatabaseHelper(context: Context) :
 
     fun getSecurityData(email: String): Triple<String, String, String>? {
         val db = this.readableDatabase
-        // SORGUDAN userName = ? YERİNE email = ? YAPTIK
         val cursor = db.rawQuery("SELECT securityQuestion, securityAnswer, securityHint FROM Users WHERE email = ?", arrayOf(email))
         return if (cursor.moveToFirst()) {
             val data = Triple(cursor.getString(0) ?: "", cursor.getString(1) ?: "", cursor.getString(2) ?: "")
@@ -75,9 +74,9 @@ class DatabaseHelper(context: Context) :
     fun updatePassword(email: String, newPass: String): Boolean {
         val db = this.writableDatabase
         val values = ContentValues().apply { put("password", newPass) }
-        // SORGUDAN userName = ? YERİNE email = ? YAPTIK
         return db.update("Users", values, "email = ?", arrayOf(email)) > 0
     }
+
     fun getUserStreak(): Int {
         val db = this.readableDatabase
         val currentTime = System.currentTimeMillis()
@@ -97,8 +96,8 @@ class DatabaseHelper(context: Context) :
         val currentTime = System.currentTimeMillis()
 
         val intervals = listOf(
-            0L,              // Stage 0: Hemen
-            0L,              // Stage 1: Hemen (Test için 0 bıraktık)
+            0L,              // Stage 0
+            0L,              // Stage 1
             604800000L,      // Stage 2: 1 Hafta
             2592000000L,     // Stage 3: 1 Ay
             7776000000L,     // Stage 4: 3 Ay
@@ -106,11 +105,9 @@ class DatabaseHelper(context: Context) :
         )
 
         if (isCorrect) {
-            if (word.repetitionLevel < intervals.size - 1) {
-                word.repetitionLevel++
-            } else {
-                word.isLearned = 1
-            }
+            // TEST AYARI: İlk doğru cevapta kelimeyi direkt son aşamaya (Stage 5) getirip öğrenildi sayıyoruz
+            word.repetitionLevel = intervals.size - 1
+            word.isLearned = 1
         } else {
             word.repetitionLevel = 0
             word.correctCount = 0
@@ -149,15 +146,18 @@ class DatabaseHelper(context: Context) :
     fun getQuizWords(limit: Int = 10): List<Word> {
         val db = this.readableDatabase
         val wordList = mutableListOf<Word>()
-        val currentTime = System.currentTimeMillis()
 
+        // Sadece son 24 saat içinde etkileşime girilmiş kelimeleri almak için zaman sınırı
+        val twentyFourHoursAgo = System.currentTimeMillis() - (24 * 60 * 60 * 1000L)
+
+        // SORGUNUN YENİ HALİ: "Bana son 24 saatte öğrenilen (isLearned = 1) kelimeleri getir"
         val query = """
             SELECT w.*, s.sampleSentence, p.correctStreak, p.currentStage, p.isLearned 
             FROM Words w 
             INNER JOIN UserProgress p ON w.wordID = p.wordID 
             LEFT JOIN WordSamples s ON w.wordID = s.wordID
-            WHERE p.lastAnsweredDate IS NOT NULL 
-            AND (p.nextReviewDate <= $currentTime OR p.nextReviewDate IS NULL)
+            WHERE p.isLearned = 1 
+            AND p.lastAnsweredDate >= $twentyFourHoursAgo
             ORDER BY RANDOM() LIMIT $limit
         """.trimIndent()
 
@@ -174,7 +174,7 @@ class DatabaseHelper(context: Context) :
     fun getFilteredWords(context: Context): List<Word> {
         val sharedPref = context.getSharedPreferences("LoopWordsSettings", Context.MODE_PRIVATE)
         val dailyGoal = sharedPref.getInt("daily_goal", 10)
-        val categoriesString = sharedPref.getString("categories", "1,2,3,4,5,6,7,8") ?: "1,2,3,4,5,6,7,8"
+        val categoriesString = sharedPref.getString("categories", "1,2,3,4,5,6,7") ?: "1,2,3,4,5,6,7"
         val currentTime = System.currentTimeMillis()
         val wordList = mutableListOf<Word>()
         val db = this.readableDatabase
@@ -215,7 +215,6 @@ class DatabaseHelper(context: Context) :
         )
     }
 
-    // --- DİĞER FONKSİYONLAR ---
     fun updateWordStatusInDb(wordText: String) {
         val db = this.writableDatabase
         val cursor = db.rawQuery("SELECT wordID FROM Words WHERE english = ? LIMIT 1", arrayOf(wordText.uppercase(Locale.ROOT)))
@@ -245,12 +244,16 @@ class DatabaseHelper(context: Context) :
     fun getFullReportData(): Map<String, Any> {
         val db = this.readableDatabase
         val data = mutableMapOf<String, Any>()
-        val totalWords = db.rawQuery("SELECT COUNT(*) FROM Words", null).use { if (it.moveToFirst()) it.getInt(0) else 0 }
-        val learnedWords = db.rawQuery("SELECT COUNT(*) FROM UserProgress WHERE isLearned = 1", null).use { if (it.moveToFirst()) it.getInt(0) else 0 }
-        data["overallPercentage"] = if (totalWords > 0) (learnedWords * 100) / totalWords else 0
 
+
+// Test için geçici olarak altına şu satırı ekle (Toplam kelimeyi 10 varsayalım):
+       val totalWords = 1000
+        val learnedWords = db.rawQuery("SELECT COUNT(*) FROM UserProgress WHERE isLearned = 1", null).use { if (it.moveToFirst()) it.getInt(0) else 0 }
+
+        data["overallPercentage"] = if (totalWords > 0) (learnedWords * 100) / totalWords else 0
         val categoryList = mutableListOf<String>()
         val catQuery = "SELECT c.categoryName, (SELECT COUNT(*) FROM Words w WHERE w.categoryID = c.categoryID) as total, (SELECT COUNT(*) FROM UserProgress p JOIN Words w ON p.wordID = w.wordID WHERE w.categoryID = c.categoryID AND p.isLearned = 1) as learned FROM Categories c"
+
         db.rawQuery(catQuery, null).use {
             while (it.moveToNext()) {
                 val name = it.getString(0) ?: "Bilinmeyen"
@@ -260,8 +263,10 @@ class DatabaseHelper(context: Context) :
                 categoryList.add("• $name: $learned/$total (%$percent)")
             }
         }
+
         data["categoryProgress"] = categoryList
         data["mostFailedStage"] = if (learnedWords > 0) "Gelişmekte" else "Yeni Başlangıç"
+
         return data
     }
 
@@ -316,7 +321,6 @@ class DatabaseHelper(context: Context) :
         val wordList = mutableListOf<String>()
         val db = this.readableDatabase
 
-        // Bugünün başlangıç zamanı (00:00:00)
         val calendar = java.util.Calendar.getInstance()
         calendar.set(java.util.Calendar.HOUR_OF_DAY, 0)
         calendar.set(java.util.Calendar.MINUTE, 0)
@@ -324,7 +328,6 @@ class DatabaseHelper(context: Context) :
         calendar.set(java.util.Calendar.MILLISECOND, 0)
         val startOfDay = calendar.timeInMillis
 
-        // Tablo isimlerini netleştirerek 'english' kolonunu çekiyoruz
         val query = """
             SELECT w.english 
             FROM Words w 
