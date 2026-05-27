@@ -39,8 +39,14 @@ class AddWordActivity : AppCompatActivity() {
                 val level = progress + 1
                 binding.tvAddWordDifficultyLabel.text = "Kelime Zorluğu: $level"
             }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // Kaydırma başladığında ekstra bir anlık UI güncellemesine gerek yok
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                // Kaydırma bittiğinde ekstra bir veri kaydetme işlemine gerek yok
+            }
         })
 
         // Resim seçme
@@ -103,12 +109,18 @@ class AddWordActivity : AppCompatActivity() {
     }
 
     private fun saveWordToDatabase() {
+        // Şu an sadece Toast mesajında kullanılan değişkenler aktif bırakıldı
         val eng = binding.etEnglishWord.text.toString().trim()
+        val difficulty = binding.seekBarAddWordDifficulty.progress + 1
+
+        /* SonarQube "Unused local variable" hatalarını önlemek için,
+           bu değişkenler veritabanı kayıt fonksiyonu tam yazılana kadar yorum satırına alındı.
+
         val tr = binding.etTurkishWord.text.toString().trim()
         val phonetic = binding.etPhonetic.text.toString().trim()
         val reading = binding.etTurkishReading.text.toString().trim()
-        val difficulty = binding.seekBarAddWordDifficulty.progress + 1
-        val categoryId = 1
+        val categoryId = 1 // Uygulamadaki 7 kategori yapısına göre dinamik seçim buraya aktarılabilir
+        */
 
         // Veritabanı işlemleri burada devam edecek...
 
